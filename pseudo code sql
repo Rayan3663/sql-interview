@@ -127,3 +127,31 @@ model.Questions = this._context.Database.SqlQueryRaw<QuestionsResponse>(
 ).ToList();
 
 
+14. Linq queries to join
+
+left join:
+var leftJoin = from s in students
+               join d in departments
+               on s.DepartmentId equals d.DepartmentId into tempGroup
+               from dept in tempGroup.DefaultIfEmpty()
+               select new
+               {
+                   StudentName = s.Name,
+                   Department = dept != null ? dept.DeptName : "No Department"
+               };
+
+foreach (var item in leftJoin)
+{
+    Console.WriteLine($"{item.StudentName} - {item.Department}");
+}
+
+
+inner join:
+var innerJoin  = from s in student
+                 join d in department
+                 on s.departmentId = d.id
+                 select new {
+                    StudentName = s.Name,
+                    Department = d.name
+                 }
+
