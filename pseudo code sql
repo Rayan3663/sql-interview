@@ -1,0 +1,129 @@
+1. Partition
+SELECT 
+  Name,
+  Department,
+  Salary,
+  ROW_NUMBER() OVER (PARTITION BY Department ORDER BY Salary DESC) AS RowNum
+FROM Employee;
+
+
+2. Group by
+select sum(salary), departmentName from employee group by department
+
+3. Truncate
+truncate table Employee
+
+4. Indexing
+Clustered, non clustered, simple, unique
+CREATE INDEX idx_employee_name
+ON Employee (Name);
+
+5. Having
+SELECT Region, SUM(SalesAmount) AS TotalSales
+FROM Sales
+GROUP BY Region
+HAVING SUM(SalesAmount) > 6000;
+
+
+6. FULL OUTER JOIN
+returns rows from both sides, if there is a match then it shows values or shows null
+
+7. Views
+CREATE VIEW EmployeeDetails AS
+SELECT e.EmployeeID, e.Name, d.DepartmentName
+FROM Employees e
+JOIN Departments d ON e.DepartmentID = d.DepartmentID;
+
+8. Acid
+✅ A – Atomicity
+"All or nothing."
+
+A transaction must completely succeed or completely fail.
+
+Example: If money is debited from Account A but cannot be credited to Account B, both actions are rolled back.
+
+✅ C – Consistency
+The database must go from one valid state to another valid state.
+
+After a transaction, all rules (constraints, triggers, foreign keys) must still be true.
+
+Example: If a salary cannot be negative, inserting a negative salary will fail.
+
+✅ I – Isolation
+Transactions don’t interfere with each other.
+
+Concurrent transactions behave as if they were executed one after the other.
+
+Example: Two people booking the last movie ticket won't both succeed.
+
+✅ D – Durability
+Once a transaction is committed, the changes are permanent, even if the system crashes immediately after.
+
+Example: If you transfer money and the app crashes, your transfer still went through.
+
+
+
+9. UNION (UNION ALL)
+SELECT Name FROM Employees_USA
+UNION
+SELECT Name FROM Employees_Canada;
+
+10. CURSOR syntax
+
+-- Step 1: Declare the cursor
+DECLARE cursor_name CURSOR FOR
+SELECT column1, column2 FROM your_table;
+
+-- Step 2: Declare variables to hold row data
+DECLARE @column1 datatype, @column2 datatype;
+
+-- Step 3: Open the cursor
+OPEN cursor_name;
+
+-- Step 4: Fetch the first row
+FETCH NEXT FROM cursor_name INTO @column1, @column2;
+
+-- Step 5: Loop through rows
+WHILE @@FETCH_STATUS = 0
+BEGIN
+    -- Do your processing here
+    PRINT @column1;
+
+    -- Fetch the next row
+    FETCH NEXT FROM cursor_name INTO @column1, @column2;
+END
+
+-- Step 6: Close and deallocate
+CLOSE cursor_name;
+DEALLOCATE cursor_name;
+
+
+11. COELSESE
+
+SELECT 
+    EmployeeID,
+    COALESCE(FirstName, 'Unknown') AS FirstName,
+    COALESCE(LastName, 'Unknown') AS LastName,
+    Department
+FROM Employees;
+
+
+12. CTE common table expression
+
+WITH CTE_Name AS (
+    -- CTE query definition
+    SELECT column1, column2, ...
+    FROM table_name
+    WHERE condition
+)
+-- Query that uses the CTE
+SELECT column1, column2
+FROM CTE_Name;
+
+13. calling SP in entity framework core
+model.Questions = this._context.Database.SqlQueryRaw<QuestionsResponse>(
+    "exec SP_GetAllQuestionsByChapterId @ChapterId={0}", 
+    request.ChapterId.Value
+).ToList();
+
+
