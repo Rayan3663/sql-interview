@@ -149,7 +149,7 @@ foreach (var item in leftJoin)
 inner join:
 var innerJoin  = from s in student
                  join d in department
-                 on s.departmentId = d.id
+                 on s.departmentId equals d.id
                  select new {
                     StudentName = s.Name,
                     Department = d.name
